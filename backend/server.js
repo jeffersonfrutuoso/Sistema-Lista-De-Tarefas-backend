@@ -7,7 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 const corsOptions = {
-  origin: 'https://sistema-lista-de-tarefas-frontend.vercel.app/', 
+  origin: 'https://sistema-lista-de-tarefas-frontend.vercel.app', 
   methods: 'GET,POST,PUT,DELETE',
 };
 
@@ -23,6 +23,7 @@ app.use('/api/tarefas', taskRoutes);
 
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
-    console.log(`Servidor rodando em http://localhost:${PORT}`);
+    console.log(`Servidor rodando em ${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}`);
+
   });
 }).catch(err => console.error('Erro ao sincronizar com o banco de dados:', err));
