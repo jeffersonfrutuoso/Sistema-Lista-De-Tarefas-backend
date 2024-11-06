@@ -24,7 +24,7 @@ const Tarefa = sequelize.define('Tarefa', {
   order: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    unique: true, 
+    defaultValue: 1, 
   },
 });
 

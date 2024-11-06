@@ -14,16 +14,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.use(express.json()); 
 
-app.get('/SistemaDeTarefas', (req, res) => {
-  res.status(200).send('OK');
-});
 
 app.use('/api/tarefas', taskRoutes);
 
 
 sequelize.sync().then(() => {
   app.listen(PORT, () => {
-    console.log(`Servidor rodando em ${process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`}`);
+    console.log(`Servidor rodando em http://localhost:${PORT}`);
 
   });
 }).catch(err => console.error('Erro ao sincronizar com o banco de dados:', err));
