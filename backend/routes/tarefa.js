@@ -38,12 +38,32 @@ router.put('/reorder', async (req, res) => {
   const { reorderedTasks } = req.body;
 
   try {
+    
     for (let index = 0; index < reorderedTasks.length; index++) {
       const task = reorderedTasks[index];
-      await Tarefa.update(
-        { order: index + 1 },
-        { where: { id: task.id } }
-      );
+      const newOrder = index + 1;
+
+      
+      const existingTask = await Tarefa.findOne({ where: { order: newOrder } });
+      if (existingTask) {
+        
+        let newOrderAdjusted = newOrder;
+        while (await Tarefa.findOne({ where: { order: newOrderAdjusted } })) {
+          newOrderAdjusted++; 
+        }
+
+        
+        await Tarefa.update(
+          { order: newOrderAdjusted },
+          { where: { id: task.id } }
+        );
+      } else {
+        
+        await Tarefa.update(
+          { order: newOrder },
+          { where: { id: task.id } }
+        );
+      }
     }
 
     res.status(200).json({ message: 'Ordem atualizada com sucesso.' });
@@ -52,6 +72,7 @@ router.put('/reorder', async (req, res) => {
     res.status(500).json({ error: 'Erro ao reordenar tarefas.' });
   }
 });
+
 
 
 router.put('/:id', async (req, res) => {
